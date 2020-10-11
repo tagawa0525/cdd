@@ -2,7 +2,7 @@
 # https://github.com/m4i/cdd
 
 if [ -z "$CDD_FILE" ]; then
-  CDD_FILE=~/.cdd
+  CDD_FILE=~/.ZSHRC_CDD_PWD_LIST
 fi
 export CDD_FILE
 
@@ -172,14 +172,17 @@ _cdd_delete() {
 _cdd_canonicalize_key() {
   local key="${1%%:*}"
 
-  if echo "$key" | grep '^\(.\+,\)\?[0-9]\+\.\?$' >/dev/null; then
+  if echo "$key" | grep '^\(.+,\)\?[0-9]+\.\?$' >/dev/null; then
     if [[ $key != *. ]]; then
       key="$key."
     fi
     key="${key}0"
   fi
-  if echo "$key" | grep '^[0-9]\+.[0-9]\+$' >/dev/null; then
+  if echo "$key" | grep '^[0-9]+.[0-9]+$' >/dev/null; then
     key="${CDD_SESSION:-_},$key"
+  fi
+  if echo "$key" | grep '^[0-9]+$' >/dev/null; then
+    key="${CDD_SESSION:-_},$key.0"
   fi
 
   echo "$key"
